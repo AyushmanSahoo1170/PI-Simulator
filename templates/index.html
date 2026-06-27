@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>π Simulator — 50 Ways to Meet Pi</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-digits" id="heroDigits" aria-hidden="true"></div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Switch theme">☀</button>
+  <div class="hero-inner">
+    <p class="eyebrow">A verification laboratory · 50 formulas · 2,200 years</p>
+    <h1><span class="pi-glyph">π</span> Simulator</h1>
+    <p class="sub">Every entry from the formula database, accounted for: 29 live engines
+    you can run for 8, 16 or 32 decimal places — each digit checked against the
+    reference — plus 21 reference entries explaining the identities, proofs and
+    pipelines that don't compute digits.</p>
+  </div>
+</header>
+
+<main>
+  <section class="bench">
+    <div class="bench-controls">
+      <div class="control">
+        <span class="control-label">Decimal places</span>
+        <div class="segmented" id="targetSeg">
+          <button data-target="8">8</button>
+          <button data-target="16">16</button>
+          <button data-target="32" class="active">32</button>
+        </div>
+      </div>
+      <div class="control">
+        <span class="control-label">Samples for statistical engines <strong id="samplesValue">200,000</strong></span>
+        <input type="range" id="samplesRange" min="4" max="6.301" step="0.001" value="5.301">
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="computeAllBtn">Compute all 29 engines</button>
+      </div>
+    </div>
+
+    <div class="result hidden" id="boardCard">
+      <div class="result-head">
+        <h3>All engines — target <span id="boardTarget"></span> decimals</h3>
+        <span class="muted" id="boardStatus"></span>
+      </div>
+      <table class="board">
+        <thead><tr><th>Engine</th><th>Tier</th><th>Result</th><th>Work</th><th>Time</th></tr></thead>
+        <tbody id="boardBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel" id="methodsPanel">
+    <div class="panel-head">
+      <h2>The engines</h2>
+      <div class="chips" id="tierChips"></div>
+    </div>
+    <div class="grid" id="methodGrid"></div>
+  </section>
+
+  <section class="panel hidden" id="historyPanel">
+    <div class="panel-head"><h2>Run history</h2></div>
+    <table class="board">
+      <thead><tr><th>Engine</th><th>Asked</th><th>Result</th><th>Work</th><th>Time</th></tr></thead>
+      <tbody id="historyBody"></tbody>
+    </table>
+  </section>
+
+  <section class="panel" id="cataloguePanel">
+    <h2>The catalogue — all 50 formulas, and why the tiers exist</h2>
+    <div class="story">
+      <p>A 64-bit float carries only ~16 reliable decimal digits, so every engine here
+      computes in Python's <code>decimal</code> arithmetic with 10 hidden guard digits, and
+      results travel to this page as strings — the moment JavaScript turned them into
+      Numbers, digits beyond 16 would become noise.</p>
+      <p>What separates the tiers is the <em>order</em> of each formula's error.
+      <strong>Instant</strong> engines gain digits multiplicatively — Chudnovsky earns ~14
+      per term, Gauss–Legendre doubles its count per iteration — so 32 decimals costs
+      a handful of steps. <strong>Medium</strong> engines converge like 1/N³: Nilakantha
+      reached 16 decimals here in 7.9 million terms, but 32 would take ~10¹² — about two
+      weeks of looping. <strong>Slow</strong> engines converge like 1/N, paying ten times
+      more work for every digit: measured live, Leibniz gives 2 digits at 1,000 terms, 3
+      at 10,000, 4 at 100,000, 5 at 1,000,000. <strong>Statistical</strong> simulators
+      obey the 1/√N law — 8 correct decimals would demand ~10¹⁷ samples, so half a
+      million buys one or two digits. And <strong>reference</strong> entries are the
+      identities, proofs, fixed fractions, duplicates and industrial pipelines that
+      express π without estimating it.</p>
+    </div>
+    <div id="catalogue"></div>
+  </section>
+
+  <footer>
+    <p>355/113 is correct to 6 exact decimals and no fraction beats it until 52163/16604 ·
+    The integral ∫₀¹ x⁴(1−x)⁴/(1+x²) dx equals 22/7 − π, proving 22/7 > π ·
+    Current world record: 105 trillion digits (Chudnovsky + FFT).</p>
+    <p class="muted">Built in Python with Flask and the decimal module · no external math libraries</p>
+  </footer>
+</main>
+
+<script src="/static/main.js"></script>
+</body>
+</html>
